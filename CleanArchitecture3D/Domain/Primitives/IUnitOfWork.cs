@@ -6,5 +6,8 @@ using System.Threading.Tasks;
 
 namespace Domain.Primitives
 {
-    public record DomainEvent(Guid Id):INotification;
+    public interface IUnitOfWork
+    {
+        Task<int> SaveChangeAsync(CancellationToken cancellationToken=default);
+    }
 }

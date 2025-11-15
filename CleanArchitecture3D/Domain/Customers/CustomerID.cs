@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Primitives
+namespace Domain.Customers
 {
-    public record DomainEvent(Guid Id):INotification;
+    public record CustomerID(Guid value);
+    
 }
