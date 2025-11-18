@@ -10,9 +10,14 @@ namespace Application.Abstractions
     {
     }
 
+    public readonly struct Unit
+    {
+        public static readonly Unit Value = new Unit();
+    }
+
     public interface ICommandHandler<TCommand>
         where TCommand : ICommand
     {
-        Task HandleAsync(TCommand command);
+        Task HandleAsync(TCommand command,CancellationToken cancellationToken);
     }
 }

@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 
@@ -10,7 +11,7 @@ namespace Application.Abstractions
 {
     public interface IMediator
     {
-        Task SendAsync<TCommand>(TCommand command) where TCommand : ICommand;
+        Task SendAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand;
         Task<TResult> SendAsync<TQuery,TResult>(TQuery query) where TQuery:IQuery<TResult>;
     }
 
@@ -21,10 +22,10 @@ namespace Application.Abstractions
         {
             _provider = provider;
         }
-        public async Task SendAsync<TCommand>(TCommand command) where TCommand : ICommand
+        public async Task SendAsync<TCommand>(TCommand command, CancellationToken cancellationToken) where TCommand : ICommand
         {
             var handler=_provider.GetRequiredService<ICommandHandler<TCommand>>();
-            await handler.HandleAsync(command);
+            await handler.HandleAsync(command,cancellationToken);
         }
 
         public async Task<TResult> SendAsync<TQuery, TResult>(TQuery query) where TQuery : IQuery<TResult>

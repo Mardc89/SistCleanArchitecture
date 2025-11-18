@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Customers
+namespace Domain.Abstractions
 {
-    public interface ICustomerRepository
+    public interface INotification
     {
     }
 }
