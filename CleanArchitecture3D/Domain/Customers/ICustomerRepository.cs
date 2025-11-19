@@ -8,5 +8,7 @@ namespace Domain.Customers
 {
     public interface ICustomerRepository
     {
+        Task<Customer?> GetByIdAsync(CustomerID id);
+        Task Add(Customer customer);
     }
 }

@@ -10,7 +10,7 @@ namespace Domain.Primitives
 {
     public class DomainEventHandler : INotificationHandler<DomainEvent>
     {
-        public Task Handle(DomainEvent notification, CancellationToken cancellationToken = default)
+        public Task HandleAsync(DomainEvent notification, CancellationToken cancellationToken = default)
         {
             Console.WriteLine($"Evento recibido:{notification.Id }");
             return Task.CompletedTask;

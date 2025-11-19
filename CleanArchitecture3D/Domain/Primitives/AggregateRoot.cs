@@ -10,7 +10,7 @@ namespace Domain.Primitives
     {
         private readonly List<DomainEvent> _domainEvents=new();
 
-        public ICollection<DomainEvent> DomainEvents() => _domainEvents;
+        public ICollection<DomainEvent> GetDomainEvents() => _domainEvents;
 
         protected void Raise(DomainEvent domainEvent)
         {
