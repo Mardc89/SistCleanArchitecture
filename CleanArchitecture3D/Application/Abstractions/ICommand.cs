@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Application.Abstractions
 {
-    public interface ICommand
+    public interface ICommand<TResult>
     {
     }
 
@@ -15,9 +15,9 @@ namespace Application.Abstractions
         public static readonly Unit Value = new Unit();
     }
 
-    public interface ICommandHandler<TCommand>
-        where TCommand : ICommand
+    public interface ICommandHandler<TCommand,TResult>
+        where TCommand : ICommand<TResult>
     {
-        Task HandleAsync(TCommand command,CancellationToken cancellationToken);
+        Task<TResult> HandleAsync(TCommand command,CancellationToken cancellationToken);
     }
 }

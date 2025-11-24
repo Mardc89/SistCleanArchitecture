@@ -1,6 +1,8 @@
 ﻿using Application.Abstractions;
 using Domain.Customers;
 using Domain.Primitives;
+using Domain.ValueObjects;
+using ErrorOr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,7 +11,7 @@ using System.Threading.Tasks;
 
 namespace Application.Customers.Create
 {
-    internal sealed class CreateCustomerCommandHandler : ICommandHandler<CreateCustomerCommand>
+    internal sealed class CreateCustomerCommandHandler : ICommandHandler<CreateCustomerCommand,ErrorOr<Unit>>
     {
         private readonly ICustomerRepository _customerRepository;
         private readonly IUnitOfWork _unitWork;
@@ -21,9 +23,43 @@ namespace Application.Customers.Create
             _unitWork = unitOfWorks ?? throw new ArgumentNullException(nameof(unitOfWorks));
             
         }
-        public Task HandleAsync(CreateCustomerCommand command, CancellationToken cancellationToken)
+        public async Task<ErrorOr<Unit>> HandleAsync(CreateCustomerCommand command, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+            try
+            {
+                if (PhoneNumber.Create(command.PhoneNumber) is not PhoneNumber phoneNumber)
+                {
+                    return Error.Validation("customer.PhoneNumber","Adress is not ");
+                }
+
+                if (Address.Create(command.City,command.Linea1,command.Linea2,command.Country,command.State,
+                    command.ZipCode) is not Address address)
+                {
+                    return Error.Validation("customer.Adress","Adress is not ");
+                }
+
+                var customer = new Customer(
+                    new CustomerID(Guid.NewGuid()),
+                    command.Name,
+                    command.LastName,
+                    command.Email,
+                    phoneNumber,
+                    address,
+                    true
+                    
+                 );
+
+
+                await _customerRepository.Add(customer);
+                await _unitWork.SaveChangesAsync(cancellationToken);
+
+                return Unit.Value;
+            }
+            catch (Exception)
+            {
+
+                throw;
+            }
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using ErrorOr;
+using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,7 +12,7 @@ namespace Application.Abstractions
 {
     public interface IMediator
     {
-        Task SendAsync<TCommand>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand;
+        Task SendAsync<TCommand,TResult>(TCommand command, CancellationToken cancellationToken = default) where TCommand : ICommand<TResult>;
         Task<TResult> SendAsync<TQuery,TResult>(TQuery query) where TQuery:IQuery<TResult>;
     }
 
@@ -22,9 +23,9 @@ namespace Application.Abstractions
         {
             _provider = provider;
         }
-        public async Task SendAsync<TCommand>(TCommand command, CancellationToken cancellationToken) where TCommand : ICommand
+        public async Task SendAsync<TCommand,TResult>(TCommand command, CancellationToken cancellationToken) where TCommand : ICommand<TResult>
         {
-            var handler=_provider.GetRequiredService<ICommandHandler<TCommand>>();
+            var handler=_provider.GetRequiredService<ICommandHandler<TCommand,TResult>>();
             await handler.HandleAsync(command,cancellationToken);
         }
 

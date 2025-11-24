@@ -21,9 +21,12 @@ namespace Infrastructure.Persistence.Configuration
                 custormerId => custormerId.value,
                 value => new CustomerID(value));
 
+
             builder.Property(c => c.Name).HasMaxLength(50);
             builder.Property(c => c.LastName).HasMaxLength(50);
-            builder.Property(c => c.FullName);
+
+            builder.Ignore(c => c.FullName);
+  
             builder.Property(c => c.Email).HasMaxLength(50);
             builder.HasIndex(c => c.Email).IsUnique();
 

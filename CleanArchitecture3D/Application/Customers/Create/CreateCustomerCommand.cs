@@ -1,4 +1,5 @@
 ﻿using Application.Abstractions;
+using ErrorOr;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,6 +18,6 @@ namespace Application.Customers.Create
         string Linea2,
         string City,
         string State,
-        string ZipCode):ICommand;
+        string ZipCode):ICommand<ErrorOr<Unit>>;
     
 }

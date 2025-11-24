@@ -15,8 +15,8 @@ namespace Domain.Customers
         public string Name { get; private set; } = string.Empty;
         public string LastName { get; set; } = string.Empty;
         public string FullName => $"{Name}{LastName}";
-        public string Email { get; set; } =string.Empty;
-        public PhoneNumber PhoneNumber { get; set; }
+        public string Email { get; private set; } =string.Empty;
+        public PhoneNumber PhoneNumber { get; private set; }
         public Address Address { get; private set; }
 
         public bool Active { get; set; }
