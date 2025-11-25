@@ -29,13 +29,13 @@ namespace Application.Customers.Create
             {
                 if (PhoneNumber.Create(command.PhoneNumber) is not PhoneNumber phoneNumber)
                 {
-                    return Error.Validation("customer.PhoneNumber","Adress is not ");
+                    return Error.Validation("customer.PhoneNumber", "Phone number has not valid format");
                 }
 
                 if (Address.Create(command.City,command.Linea1,command.Linea2,command.Country,command.State,
                     command.ZipCode) is not Address address)
                 {
-                    return Error.Validation("customer.Adress","Adress is not ");
+                    return Error.Validation("customer.Adress", "Adress is not valid");
                 }
 
                 var customer = new Customer(
@@ -55,10 +55,10 @@ namespace Application.Customers.Create
 
                 return Unit.Value;
             }
-            catch (Exception)
+            catch (Exception ex)
             {
 
-                throw;
+                return Error.Failure("CreateCustomer.Failure",ex.Message);
             }
         }
     }

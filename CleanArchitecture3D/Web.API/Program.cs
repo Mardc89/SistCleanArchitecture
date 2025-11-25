@@ -23,6 +23,8 @@ if (app.Environment.IsDevelopment())
     app.ApplyMigration();
 }
 
+app.UseExceptionHandler("/error");
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
