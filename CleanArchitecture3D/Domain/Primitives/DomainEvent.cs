@@ -7,5 +7,5 @@ using System.Threading.Tasks;
 
 namespace Domain.Primitives
 {
-    public record DomainEvent(Guid Id):INotification;
+    public record DomainEvent(Guid Id):INotifications;
 }

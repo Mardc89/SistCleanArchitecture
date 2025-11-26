@@ -1,12 +1,12 @@
-﻿using System;
+﻿using Application.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Domain.Abstractions
+namespace Application.Customers.GetById
 {
-    public interface INotification
-    {
-    }
+  
+
 }

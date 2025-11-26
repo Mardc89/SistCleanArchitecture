@@ -14,9 +14,9 @@ namespace Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWork
     {
-        public INotificationPublisher _publisher;
+        public INotificationPublish _publisher;
 
-        public ApplicationDbContext(DbContextOptions options,INotificationPublisher publisher):base(options)
+        public ApplicationDbContext(DbContextOptions options,INotificationPublish publisher):base(options)
         {
                 _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
         }

@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Primitives
 {
-    public class DomainEventHandler : INotificationHandler<DomainEvent>
+    public class DomainEventHandler : INotificationHand<DomainEvent>
     {
         public Task HandleAsync(DomainEvent notification, CancellationToken cancellationToken = default)
         {

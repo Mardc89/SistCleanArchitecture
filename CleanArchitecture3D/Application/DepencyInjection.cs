@@ -3,8 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Application.Abstractions;
 using Domain.Abstractions;
+using Application.Customers.Create;
 using Domain.Primitives;
+using ErrorOr;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -14,9 +17,17 @@ namespace Application
     {
         public static IServiceCollection AddAplication(this IServiceCollection services)
         {
-            services.AddSingleton<INotificationPublisher, NotificationPublisher>();
-            services.AddTransient<INotificationHandler<DomainEvent>, DomainEventHandler>();
+            
+            services.AddSingleton<INotificationPublish, NotificationPublisher>();
+            services.AddTransient<INotificationHand<DomainEvent>, DomainEventHandler>();
             services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
+
+            services.AddScoped<ISender, Sender>();
+
+            // Registrar todos tus handlers
+            services.AddScoped<ICommandHandler<CreateCustomerCommand, ErrorOr<Unit>>, CreateCustomerCommandHandler>();
+
+
             return services; 
         }
     }

@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Web.API.Common.Http;
-using static Microsoft.EntityFrameworkCore.DbLoggerCategory.Model;
+
 
 namespace Web.API.Controllers
 {
+    [ApiController]
     public class ApiController : Controller
     {
         protected IActionResult Problem(List<Error> errors)
