@@ -18,8 +18,8 @@ namespace Application
         public static IServiceCollection AddAplication(this IServiceCollection services)
         {
             
-            services.AddSingleton<INotificationPublish, NotificationPublisher>();
-            services.AddTransient<INotificationHand<DomainEvent>, DomainEventHandler>();
+            services.AddSingleton<INotificationPublishers, NotificationPublishers>();
+            services.AddTransient<INotificationHandlers<DomainEvent>, DomainEventHandler>();
             services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
 
             services.AddScoped<ISender, Sender>();

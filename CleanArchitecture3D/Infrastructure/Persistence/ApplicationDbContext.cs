@@ -1,4 +1,5 @@
 ﻿using Application.Data;
+
 using Domain.Abstractions;
 using Domain.Customers;
 using Domain.Primitives;
@@ -14,9 +15,9 @@ namespace Infrastructure.Persistence
 {
     public class ApplicationDbContext : DbContext, IApplicationDbContext, IUnitOfWork
     {
-        public INotificationPublish _publisher;
+        public INotificationPublishers _publisher;
 
-        public ApplicationDbContext(DbContextOptions options,INotificationPublish publisher):base(options)
+        public ApplicationDbContext(DbContextOptions options,INotificationPublishers publisher):base(options)
         {
                 _publisher = publisher ?? throw new ArgumentNullException(nameof(publisher));
         }

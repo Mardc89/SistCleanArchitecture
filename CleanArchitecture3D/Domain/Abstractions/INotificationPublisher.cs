@@ -6,23 +6,23 @@ using System.Threading.Tasks;
 
 namespace Domain.Abstractions
 {
-    public interface INotificationPublish
+    public interface INotificationPublishers
     {
         Task PublishAsync(INotifications notification,CancellationToken cancellationToken=default);
     }
 
-    public class NotificationPublisher : INotificationPublish
+    public class NotificationPublishers : INotificationPublishers
     {
         private readonly IServiceProvider _provider;
 
-        public NotificationPublisher(IServiceProvider provider)
+        public NotificationPublishers(IServiceProvider provider)
         {
             _provider = provider;
         }
 
         public async Task PublishAsync(INotifications notification, CancellationToken cancellationToken = default)
         {
-            var handlerType = typeof(INotificationHand<>).MakeGenericType(notification.GetType());
+            var handlerType = typeof(INotificationHandlers<>).MakeGenericType(notification.GetType());
 
             var handlers = (IEnumerable<object>)_provider.GetService(
                 typeof(IEnumerable<>).MakeGenericType(handlerType)

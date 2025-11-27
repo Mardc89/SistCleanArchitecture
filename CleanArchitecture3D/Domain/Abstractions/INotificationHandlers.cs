@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Domain.Abstractions
 {
-    public interface INotificationHand<TNotification> where TNotification : INotifications
+    public interface INotificationHandlers<TNotification> where TNotification : INotifications
     {
         Task HandleAsync(TNotification notification,CancellationToken cancellationToken=default);
     }

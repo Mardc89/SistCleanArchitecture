@@ -12,11 +12,11 @@ namespace Application.Abstractions
         Task PublishAsync(INotification notification, CancellationToken cancellationToken = default);
     }
 
-    public class NotificationPublish : INotificationPublisher
+    public class NotificationPublisher : INotificationPublisher
     {
         private readonly IServiceProvider _provider;
 
-        public NotificationPublish(IServiceProvider provider)
+        public NotificationPublisher(IServiceProvider provider)
         {
             _provider = provider;
         }
