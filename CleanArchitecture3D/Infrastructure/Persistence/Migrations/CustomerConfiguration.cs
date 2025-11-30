@@ -27,7 +27,7 @@ namespace Infrastructure.Persistence.Configuration
 
             builder.Ignore(c => c.FullName);
   
-            builder.Property(c => c.Email).HasMaxLength(50);
+            builder.Property(c => c.Email).HasMaxLength(255);
             builder.HasIndex(c => c.Email).IsUnique();
 
             builder.Property(c => c.PhoneNumber).HasConversion(

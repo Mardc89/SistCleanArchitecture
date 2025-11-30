@@ -33,7 +33,7 @@ namespace Application.Customers.Create
                     return Error.Validation("customer.PhoneNumber", "Phone number has not valid format");
                 }
 
-                if (Address.Create(command.City,command.Linea1,command.Linea2,command.Country,command.State,
+                if (Address.Create(command.Country,command.Linea1,command.Linea2,command.City,command.State,
                     command.ZipCode) is not Address address)
                 {
                     return Error.Validation("customer.Adress", "Adress is not valid");
