@@ -10,6 +10,7 @@ using Domain.Primitives;
 using ErrorOr;
 using FluentValidation;
 using Microsoft.Extensions.DependencyInjection;
+using Application.Common.Behavior;
 
 namespace Application
 {
@@ -26,7 +27,7 @@ namespace Application
 
             // Registrar todos tus handlers
             services.AddScoped<ICommandHandler<CreateCustomerCommand, ErrorOr<Unit>>, CreateCustomerCommandHandler>();
-
+            services.AddScoped(typeof(IPipeLineBehavior<,>), typeof(ValidationBehavior<,>));
 
             return services; 
         }

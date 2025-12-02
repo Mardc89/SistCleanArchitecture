@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,6 +44,32 @@ namespace Application.Abstractions
             }
 
             return await handler.HandleAsync((dynamic)query, cancellationToken);
+        }
+
+        public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,CancellationToken cancellationToken = default)
+        {
+            var handler = _serviceProvider.GetRequiredService<IRequestHandler<IRequest<TResponse>, TResponse>>();
+
+            // Obtener los pipelines
+            var behaviors = _serviceProvider
+                .GetServices<IPipeLineBehavior<IRequest<TResponse>, TResponse>>()
+                .ToList();
+
+            // Construir el pipeline
+            RequestHandlerDelegate<TResponse> next = () =>
+                handler.Handle(request, cancellationToken);
+
+            foreach (var behavior in behaviors.AsEnumerable().Reverse())
+            {
+                var currentNext = next;
+
+                next = () => behavior.Handle(
+                    (dynamic)request,
+                    currentNext,
+                    cancellationToken);
+            }
+
+            return await next();
         }
     }
 }
