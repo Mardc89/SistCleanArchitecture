@@ -18,9 +18,10 @@ namespace Application
     {
         public static IServiceCollection AddAplication(this IServiceCollection services)
         {
-            
-            services.AddSingleton<INotificationPublishers, NotificationPublishers>();
-            services.AddTransient<INotificationHandlers<DomainEvent>, DomainEventHandler>();
+
+                     
+            services.AddScoped<INotificationPublishers, NotificationPublishers>();
+            services.AddScoped<INotificationHandlers<DomainEvent>, DomainEventHandler>();
             services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
 
             services.AddScoped<ISender, Sender>();
@@ -28,7 +29,7 @@ namespace Application
             // Registrar todos tus handlers
             services.AddScoped<ICommandHandler<CreateCustomerCommand, ErrorOr<Unit>>, CreateCustomerCommandHandler>();
             services.AddScoped(typeof(IPipeLineBehavior<,>), typeof(ValidationBehavior<,>));
-
+            services.AddTransient(typeof(ICommandPipeLineBehavior<,>), typeof(LoggingBehavior<,>));
             return services; 
         }
     }

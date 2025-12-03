@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 namespace Application.Abstractions
 {
     public delegate Task<TResponse> CommandHandlerDelegate<TResponse>();
-    public interface ICommandIPipeLineBehavior<TCommand,TResponse>
+    public interface ICommandPipeLineBehavior<TCommand,TResponse>
     {
         Task<TResponse> HandleAsync(
             TCommand command,
