@@ -10,8 +10,7 @@ using System.Threading.Tasks;
 
 namespace Application.Common.Behavior
 {
-    public class ValidationBehavior<TRequest,TResponse>
-        : IPipeLineBehavior<TRequest, TResponse> 
+    public class ValidationBehavior<TRequest,TResponse>: IPipeLineBehavior<TRequest, TResponse> 
         where TRequest:IRequest<TResponse> 
         where TResponse:IErrorOr
        

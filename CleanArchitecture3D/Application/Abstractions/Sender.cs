@@ -46,30 +46,127 @@ namespace Application.Abstractions
             return await handler.HandleAsync((dynamic)query, cancellationToken);
         }
 
-        public async Task<TResponse> SendAsync<TResponse>(IRequest<TResponse> request,CancellationToken cancellationToken = default)
-        {
-            var handler = _serviceProvider.GetRequiredService<IRequestHandler<IRequest<TResponse>, TResponse>>();
+        //public async Task<TResponse> Send<TResponse>(ICommand<TResponse> command,CancellationToken cancellationToken = default)
+        //{
+        //    var handler = _serviceProvider.GetRequiredService<ICommandHandler<ICommand<TResponse>, TResponse>>();
 
-            // Obtener los pipelines
+        //    // Obtener los pipelines
+        //    var behaviors = _serviceProvider
+        //        .GetServices<IPipeLineBehavior<,>()
+        //        .ToList();
+
+        //    // Construir el pipeline
+        //    RequestHandlerDelegate<TResponse> next = () =>
+        //        handler.HandleAsync(command, cancellationToken);
+
+        //    foreach (var behavior in behaviors.AsEnumerable().Reverse())
+        //    {
+        //        var currentNext = next;
+
+        //        next = () => behavior.Handle(
+        //            (dynamic)command,
+        //            currentNext,
+        //            cancellationToken);
+        //    }
+
+        //    return await next();
+        //}
+
+
+        //public async Task<TResponse> Send<TResponse>(ICommand<TResponse> command,CancellationToken cancellationToken = default)
+        //{
+        //    var handlerType = typeof(ICommandHandler<,>)
+        //        .MakeGenericType(command.GetType(), typeof(TResponse));
+
+        //    dynamic handler = _serviceProvider.GetRequiredService(handlerType);
+
+        //    var behaviors = _serviceProvider
+        //        .GetServices(typeof(ICommandPipeLineBehavior<,>)
+        //            .MakeGenericType(command.GetType(), typeof(TResponse)))
+        //        .Cast<dynamic>()
+        //        .ToList();
+
+        //    CommandHandlerDelegate<TResponse> next = () =>
+        //        handler.HandleAsync((dynamic)command, cancellationToken);
+
+        //    foreach (var behavior in behaviors.AsEnumerable().Reverse())
+        //    {
+        //        var localNext = next;
+        //        next = () => behavior.HandleAsync((dynamic)command, localNext, cancellationToken);
+        //    }
+
+        //    return await next();
+        //}
+
+
+        //public async Task<TResponse> Send<TResponse>(ICommand<TResponse> command,CancellationToken cancellationToken = default)
+        //{
+        //    // Obtener el handler específico
+        //    var handlerType = typeof(ICommandHandler<,>)
+        //        .MakeGenericType(command.GetType(), typeof(TResponse));
+
+        //    dynamic handler = _serviceProvider.GetRequiredService(handlerType);
+
+        //    // Obtener behaviors específicos del comando concreto
+        //    var behaviorType = typeof(IPipeLineBehavior<,>)
+        //        .MakeGenericType(command.GetType(), typeof(TResponse));
+
+        //    var behaviors = _serviceProvider
+        //        .GetServices(behaviorType)
+        //        .Cast<dynamic>()
+        //        .Reverse()
+        //        .ToList();
+
+        //    // Construir pipeline: último → el handler
+        //    Func<Task<TResponse>> pipeline = () => handler.HandleAsync((dynamic)command, cancellationToken);
+
+        //    // Cada behavior envuelve al siguiente
+        //    foreach (dynamic behavior in behaviors)
+        //    {
+        //        var next = pipeline;
+
+        //        pipeline = () => behavior.Handle(
+        //            (dynamic)command,
+        //            cancellationToken,
+        //            next
+        //        );
+        //    }
+
+        //    return await pipeline();
+        //}
+
+
+        public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request,CancellationToken cancellationToken = default)
+        {
+            // Resolver el handler principal
+            var handlerType = typeof(ICommandHandler<,>)
+                .MakeGenericType(request.GetType(), typeof(TResponse));
+
+            dynamic handler = _serviceProvider.GetRequiredService(handlerType);
+
+            // Resolver behaviors
+            var behaviorType = typeof(IPipeLineBehavior<,>)
+                .MakeGenericType(request.GetType(), typeof(TResponse));
+
             var behaviors = _serviceProvider
-                .GetServices<IPipeLineBehavior<IRequest<TResponse>, TResponse>>()
+                .GetServices(behaviorType)
+                .Cast<dynamic>()
                 .ToList();
 
-            // Construir el pipeline
+            // Construimos delegate final (handler real)
             RequestHandlerDelegate<TResponse> next = () =>
-                handler.Handle(request, cancellationToken);
+                handler.Handle((dynamic)request, cancellationToken);
 
+            // "envolver" el handler en behaviors (como MediatR)
             foreach (var behavior in behaviors.AsEnumerable().Reverse())
             {
-                var currentNext = next;
+                var innerNext = next;
 
-                next = () => behavior.Handle(
-                    (dynamic)request,
-                    currentNext,
-                    cancellationToken);
+                next = () => behavior.Handle((dynamic)request, innerNext, cancellationToken);
             }
 
             return await next();
         }
+
     }
 }

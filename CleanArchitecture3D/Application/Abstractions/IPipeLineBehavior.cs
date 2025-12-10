@@ -12,8 +12,8 @@ namespace Application.Abstractions
     public interface IPipeLineBehavior<TRequest, TResponse>
     {
         Task<TResponse> Handle(
-        TRequest request,
-    RequestHandlerDelegate<TResponse> next,
-    CancellationToken cancellationToken);
+            TRequest request,
+            RequestHandlerDelegate<TResponse> next,
+            CancellationToken cancellationToken);
     }
 }

@@ -1,4 +1,5 @@
 ﻿using Infrastructure.Services;
+using Web.API.Middlewares;
 
 namespace Web.API
 {
@@ -9,7 +10,7 @@ namespace Web.API
             services.AddControllers();
             services.AddEndpointsApiExplorer();
             services.AddSwaggerGen();
-
+            services.AddTransient<GlobalExcepcionHanldlingMiddlware>();
             return services;
         }
     }

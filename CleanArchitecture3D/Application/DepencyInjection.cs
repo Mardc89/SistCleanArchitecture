@@ -22,14 +22,19 @@ namespace Application
                      
             services.AddScoped<INotificationPublishers, NotificationPublishers>();
             services.AddScoped<INotificationHandlers<DomainEvent>, DomainEventHandler>();
-            services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
+    
 
             services.AddScoped<ISender, Sender>();
-
+            //services.AddValidatorsFromAssemblyContaining<CreateCustomerComandValidator>();
             // Registrar todos tus handlers
             services.AddScoped<ICommandHandler<CreateCustomerCommand, ErrorOr<Unit>>, CreateCustomerCommandHandler>();
-            services.AddScoped(typeof(IPipeLineBehavior<,>), typeof(ValidationBehavior<,>));
-            services.AddTransient(typeof(ICommandPipeLineBehavior<,>), typeof(LoggingBehavior<,>));
+            //services.AddScoped(typeof(IPipeLineBehavior<,>), typeof(ValidationBehavior<,>));
+            //services.AddTransient(typeof(ICommandPipeLineBehavior<,>), typeof(LoggingBehavior<,>));
+            services.AddTransient(typeof(IPipeLineBehavior<,>), typeof(ValidationBehavior<,>));        
+            //services.AddValidatorsFromAssemblyContaining<ApplicationAssemblyReference>();
+
+            //services.AddTransient<IValidator<CreateCustomerCommand>, CreateCustomerComandValidator>();
+
             return services; 
         }
     }
