@@ -11,6 +11,6 @@ namespace Application.Abstractions
         Task<TResponse> SendAsync<TResponse>(ICommand<TResponse> command,CancellationToken cancellationToken=default);
         Task<TResult> SendAsync<TResult>(IQuery<TResult> query, CancellationToken cancellationToken = default);
         //Task<TResponse> Send<TResponse>(ICommand<TResponse> command, CancellationToken cancellationToken = default);
-        Task<TResponse> Send<TResponse>(IRequest<TResponse> request, CancellationToken cancellationToken = default);
+        Task<TResponse> Send<TResponse>(ICommand<TResponse> request, CancellationToken cancellationToken = default);
     }
 }

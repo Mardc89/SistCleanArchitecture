@@ -136,7 +136,7 @@ namespace Application.Abstractions
         //}
 
 
-        public async Task<TResponse> Send<TResponse>(IRequest<TResponse> request,CancellationToken cancellationToken = default)
+        public async Task<TResponse> Send<TResponse>(ICommand<TResponse> request,CancellationToken cancellationToken = default)
         {
             // Resolver el handler principal
             var handlerType = typeof(ICommandHandler<,>)
@@ -155,14 +155,14 @@ namespace Application.Abstractions
 
             // Construimos delegate final (handler real)
             RequestHandlerDelegate<TResponse> next = () =>
-                handler.Handle((dynamic)request, cancellationToken);
+                handler.HandleAsync((dynamic)request, cancellationToken);
 
             // "envolver" el handler en behaviors (como MediatR)
             foreach (var behavior in behaviors.AsEnumerable().Reverse())
             {
                 var innerNext = next;
 
-                next = () => behavior.Handle((dynamic)request, innerNext, cancellationToken);
+                next = () => behavior.HandleAsync((dynamic)request, innerNext, cancellationToken);
             }
 
             return await next();
